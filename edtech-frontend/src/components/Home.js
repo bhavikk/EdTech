@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductCard from './ProductCard';
+import { toast } from 'react-toastify'; // Import toast
 import { useNavigate } from 'react-router-dom';
 
 function Home({ cart, setCart }) {
@@ -12,7 +13,7 @@ function Home({ cart, setCart }) {
 
   useEffect(() => {
     // Fetch all products
-    axios.get('http://localhost:5000/products').then(res => {
+    axios.get('http://localhost:5000/products').then((res) => {
       setProducts(res.data);
     });
   }, []);
@@ -21,16 +22,40 @@ function Home({ cart, setCart }) {
     // Call AI agent API with the message
     axios
       .post('http://localhost:5000/recommend', { message })
-      .then(res => {
+      .then((res) => {
         setRecommendation(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error getting recommendation:', err);
       });
   };
 
   const handleAddToCart = (product) => {
-    setCart([...cart, product]);
+    const productInCart = cart.find((item) => item._id === product._id);
+
+    // If the product is not already in the cart, add it
+    if (!productInCart) {
+      setCart([...cart, product]);
+      // Show success toast notification
+      toast.success(`${product.name} added to cart successfully!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } else {
+      // Optional: Show error toast if product is already in the cart
+      toast.error(`${product.name} is already in the cart!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   };
 
   const handleBuyNow = (product) => {
@@ -45,12 +70,13 @@ function Home({ cart, setCart }) {
         <p>Explore our top courses and enhance your learning journey with personalized recommendations from our AI agent.</p>
       </div>
 
+    
       <div>
         <h2 className="text-2xl font-semibold mb-4">All Courses</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {products.map(product => (
+          {products.map((product) => (
             <ProductCard
-              key={product._id}
+              key={product._id || product.id}
               product={product}
               handleAddToCart={handleAddToCart}
               handleBuyNow={handleBuyNow}
