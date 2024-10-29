@@ -1,0 +1,32 @@
+version: "2.0"
+stories:
+- story: ask for course info
+  steps:
+  - intent: ask_course_info
+  - slot_was_set:
+      - course_name: "Intro to Python"
+  - action: action_recommend_course
+
+- story: ask for course price
+  steps:
+  - intent: ask_course_price
+  - slot_was_set:
+      - course_name: "Data Science with Python"
+  - action: action_recommend_course
+
+- story: filter courses by price
+  steps:
+  - intent: filter_courses_by_price
+  - slot_was_set:
+      - price_range: "150"
+  - action: action_filter_courses_by_price
+
+- story: greet user
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- story: goodbye user
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye

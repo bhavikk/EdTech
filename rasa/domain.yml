@@ -1,0 +1,48 @@
+version: "2.0"
+intents:
+  - ask_course_info
+  - ask_course_price
+  - filter_courses_by_price
+  - greet
+  - goodbye
+
+entities:
+  - course_name
+  - price_range
+
+slots:
+  course_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: course_name
+
+  price_range:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: price_range
+
+
+responses:
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+
+  utter_goodbye:
+    - text: "Goodbye! Have a great day."
+
+  utter_iamabot:
+    - text: "I am a virtual assistant here to help you with course information."
+
+  utter_course_info:
+    - text: "We offer the {course_name} course. It costs {price}. Would you like more details?"
+
+  utter_course_price:
+    - text: "The price of {course_name} is {price}."
+
+
+actions:
+  - action_recommend_course
+  - action_filter_courses_by_price

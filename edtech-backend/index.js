@@ -31,6 +31,46 @@ app.get('/products', async (req, res) => {
   }
 });
 
+// New API to get courses by name (course_name entity)
+app.get('/api/courses', async (req, res) => {
+  const { name, max_price } = req.query;
+
+  try {
+    if (name) {
+      const courses = await Product.find({
+        name: { $regex: new RegExp(name, 'i') } // Case-insensitive search for course names
+      });
+      
+      if (courses.length > 0) {
+        res.json(courses);
+      } else {
+        res.status(404).json({ message: `No courses found for ${name}.` });
+      }
+    } 
+    
+    // Filter courses by max price (price_range entity)
+    else if (max_price) {
+      const price = parseFloat(max_price);
+      const courses = await Product.find({ price: { $lte: price } });
+      
+      if (courses.length > 0) {
+        res.json(courses);
+      } else {
+        res.status(404).json({ message: `No courses found under $${max_price}.` });
+      }
+    } 
+    
+    // If neither name nor price is provided, return all courses
+    else {
+      const courses = await Product.find();
+      res.json(courses);
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching courses' });
+  }
+});
+
+// AI Recommendation API
 app.post('/recommend', async (req, res) => {
   const message = req.body.message;
   const products = await Product.find();

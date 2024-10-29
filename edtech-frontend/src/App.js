@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
@@ -14,17 +13,20 @@ import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Track authentication state
 
   return (
     <Router>
-      <NavBar cartCount={cart.length} />
+      {/* Pass isAuthenticated and setIsAuthenticated to NavBar */}
+      <NavBar cartCount={cart.length} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
       <Routes>
+        {/* Pass setIsAuthenticated to Login and Signup to update authentication state */}
         <Route path="/" element={<Home cart={cart} setCart={setCart} />} />
         <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
         <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} />} />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
       </Routes>
       <AIChat cart={cart} setCart={setCart} />
       <ToastContainer /> {/* Toast notification container */}

@@ -24,7 +24,7 @@ function Checkout({ cart, setCart }) {
     const orderData = {
       products: cart.map(item => ({
         product: item._id || item.id,
-        quantity: 1, // Assuming quantity 1 for simplicity
+        quantity: 1, 
       })),
       shippingAddress,
       billingAddress,

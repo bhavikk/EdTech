@@ -1,0 +1,33 @@
+version: "2.0"
+nlu:
+- intent: ask_course_info
+  examples: |
+    - Tell me about the [Intro to Python](course_name) course
+    - Can you give me details on [Advanced Machine Learning](course_name)?
+    - I want to know about [Web Development Bootcamp](course_name)
+    - Do you offer a course in [Data Science with Python](course_name)?
+    - What is the price of the [Cybersecurity Essentials](course_name)?
+
+- intent: ask_course_price
+  examples: |
+    - How much does the [Intro to Python](course_name) course cost?
+    - What is the price of [Blockchain Development for Beginners](course_name)?
+    - How expensive is [Data Structures and Algorithms in Java](course_name)?
+
+- intent: filter_courses_by_price
+  examples: |
+    - What courses are available for under 100 dollars?
+    - Show me courses cheaper than 150
+    - What courses are below 200 dollars?
+
+- intent: greet
+  examples: |
+    - Hello
+    - Hi
+    - Hey there
+
+- intent: goodbye
+  examples: |
+    - Bye
+    - Goodbye
+    - See you later
