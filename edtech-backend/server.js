@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 51105;
 
 // OpenAI Configuration with API key
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || 'sk-whsmxkxgCh3qLJ_LLk94ZmWsSbUUuyEDdfB5kRdtU1T3BlbkFJdwxJSt5qUg1LVfXiOaqrPn7Fb47Nq9dxKL7WeJ2hgA'
+    apiKey: process.env.OPENAI_API_KEY || 'add-your-key-here'
 });
 
 // Middleware
