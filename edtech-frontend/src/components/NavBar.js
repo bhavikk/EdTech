@@ -13,6 +13,7 @@ function NavBar({ cartCount, isAuthenticated, setIsAuthenticated }) {
           {isAuthenticated ? (
             <>
               <Link to="/orders" className="hover:underline">Orders</Link>
+              <Link to="/customer-service" className="hover:underline">Customer Service</Link>
               <button
                 onClick={() => {
                   localStorage.removeItem('token');

@@ -8,28 +8,36 @@ import Orders from './components/Orders';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import AIChat from './components/AIChat';
+import CustomerService from './components/CustomerService'; // Import Customer Service
+import OpenTicket from './components/OpenTicket'; // Import OpenTicket
+import StatusTicket from './components/StatusTicket'; // Import StatusTicket
+import ReportFraud from './components/ReportFraud'; // Import ReportFraud
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token')); // Track authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
 
   return (
     <Router>
-      {/* Pass isAuthenticated and setIsAuthenticated to NavBar */}
       <NavBar cartCount={cart.length} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
       <Routes>
-        {/* Pass setIsAuthenticated to Login and Signup to update authentication state */}
         <Route path="/" element={<Home cart={cart} setCart={setCart} />} />
         <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
         <Route path="/checkout" element={<Checkout cart={cart} setCart={setCart} />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
+        
+        {/* Customer Service Routes */}
+        <Route path="/customer-service" element={<CustomerService />} />
+        <Route path="/customer-service/open-ticket" element={<OpenTicket />} />
+        <Route path="/customer-service/status-ticket" element={<StatusTicket />} />
+        <Route path="/customer-service/report-fraud" element={<ReportFraud />} />
       </Routes>
       <AIChat cart={cart} setCart={setCart} />
-      <ToastContainer /> {/* Toast notification container */}
+      <ToastContainer />
     </Router>
   );
 }

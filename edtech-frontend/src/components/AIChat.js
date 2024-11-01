@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/components/AIChat.js
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AIChat({ cart, setCart }) {
@@ -8,85 +9,69 @@ function AIChat({ cart, setCart }) {
   const [recommendedProduct, setRecommendedProduct] = useState(null);
   const navigate = useNavigate();
 
+  // Open chat with greeting and options
+  useEffect(() => {
+    if (isOpen) {
+      setChatHistory([
+        { sender: 'ai', text: 'Hello! How can I assist you today?' },
+        { sender: 'ai', text: 'Please choose one of the options below:' },
+        { sender: 'ai', text: '1. Get Recommendation' },
+        { sender: 'ai', text: '2. Open a Ticket' },
+        { sender: 'ai', text: '3. Report Fraudulent Transaction' },
+      ]);
+    }
+  }, [isOpen]);
+
   const toggleChat = () => {
     setIsOpen(!isOpen);
   };
 
   const handleSendMessage = () => {
-    if (!message.trim()) return; // Prevent sending empty messages
-  
+    if (!message.trim()) return;
+
     // Add user's message to chat history
     const userMessage = { sender: 'user', text: message };
     setChatHistory([...chatHistory, userMessage]);
-  
-    const messageToSend = { sender: "user", message: message };
-  
-    // Send message to Rasa
-    fetch("http://localhost:5005/webhooks/rest/webhook", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(messageToSend),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Rasa Response Data:", data); // Log the full response from Rasa
-      
-        const rasaMessages = data.map((resp) => ({
-          sender: "ai",
-          text: resp.text || '', // Ensure text is defined
-          // Check if the response contains product details in the custom field
-          product: resp.custom || null,
-        }));
-      
-        console.log("Processed Rasa Messages:", rasaMessages); // Log the processed messages
-      
-        // Find the message that contains product details in the custom field
-        const recommended = rasaMessages.find(
-          (msg) => msg.product // No need to check text here since custom is what you need
-        );
-      
-        console.log("Recommended Product:", recommended); // Log the recommendation
-      
-        if (recommended && recommended.product) {
-          console.log("Setting recommended product...");
-      
-          // Set full product details
-          setRecommendedProduct({
-            name: recommended.product.name,
-            price: recommended.product.price,
-            id: recommended.product.id,
-            image: recommended.product.image,
-          });
-        }
-      
-        // Update the chat history with the AI's responses
-        setChatHistory([...chatHistory, userMessage, ...rasaMessages]);
-      })
-      
-      
-      .catch((error) => {
-        console.error("Error communicating with Rasa:", error);
-      });
-  
+
+    // Check for specific user options
+    if (message === '1' || message.toLowerCase().includes('recommendation')) {
+      handleRecommendation();
+    } else if (message === '2' || message.toLowerCase().includes('ticket')) {
+      navigate('/customer-service/open-ticket');
+    } else if (message === '3' || message.toLowerCase().includes('fraud')) {
+      navigate('/customer-service/report-fraud');
+    } else {
+      // If input doesn't match options, send message to AI for a generic response
+      sendMessageToAI(message);
+    }
+
     // Clear the input field
     setMessage('');
   };
-  
 
-  const handleBuyProduct = () => {
-    // Add the recommended product to the cart and navigate to checkout
-    if (recommendedProduct) {
-      setCart([recommendedProduct]);
-      navigate('/checkout');
-    }
+  const handleRecommendation = () => {
+    setChatHistory([...chatHistory, { sender: 'ai', text: 'Getting a recommendation for you...' }]);
   };
 
-  // Use onKeyDown event to detect the Enter key
+  const sendMessageToAI = (message) => {
+    fetch("http://localhost:5005/webhooks/rest/webhook", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sender: "user", message }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const rasaMessages = data.map((resp) => ({ sender: "ai", text: resp.text || '' }));
+        setChatHistory([...chatHistory, ...rasaMessages]);
+      })
+      .catch((error) => {
+        console.error("Error communicating with AI:", error);
+      });
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent the default form submit behavior
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -94,7 +79,7 @@ function AIChat({ cart, setCart }) {
   return (
     <div className="fixed bottom-5 right-5 z-50">
       {isOpen ? (
-        <div className="w-80 h-96 bg-white shadow-lg rounded-lg flex flex-col">
+        <div className="w-96 h-[32rem] bg-white shadow-lg rounded-lg flex flex-col">
           <div className="bg-blue-500 text-white p-4 rounded-t-lg">
             <h2 className="text-lg">AI Assistant</h2>
             <button onClick={toggleChat} className="absolute top-3 right-3 text-white">✕</button>
@@ -107,12 +92,10 @@ function AIChat({ cart, setCart }) {
                 </p>
               </div>
             ))}
-
-            {/* If a product is recommended, show buttons to buy or decline */}
             {recommendedProduct && (
               <div className="mt-4">
                 <button
-                  onClick={handleBuyProduct}
+                  onClick={() => navigate('/checkout')}
                   className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2"
                 >
                   Buy Now
@@ -131,8 +114,8 @@ function AIChat({ cart, setCart }) {
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={handleKeyDown}  // Handle Enter key press (comment placed outside JSX)
-              placeholder="Type a message..."
+              onKeyDown={handleKeyDown}
+              placeholder="Type a message or option..."
               className="w-full p-2 border rounded-lg"
             />
             <button onClick={handleSendMessage} className="mt-2 w-full bg-blue-500 text-white py-2 rounded-lg">

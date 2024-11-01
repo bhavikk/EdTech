@@ -18,17 +18,6 @@ function Home({ cart, setCart }) {
     });
   }, []);
 
-  const handleSendMessageToAI = () => {
-    // Call AI agent API with the message
-    axios
-      .post('http://localhost:5000/recommend', { message })
-      .then((res) => {
-        setRecommendation(res.data);
-      })
-      .catch((err) => {
-        console.error('Error getting recommendation:', err);
-      });
-  };
 
   const handleAddToCart = (product) => {
     const productInCart = cart.find((item) => item._id === product._id);
@@ -70,7 +59,6 @@ function Home({ cart, setCart }) {
         <p>Explore our top courses and enhance your learning journey with personalized recommendations from our AI agent.</p>
       </div>
 
-    
       <div>
         <h2 className="text-2xl font-semibold mb-4">All Courses</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

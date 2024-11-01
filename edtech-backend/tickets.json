@@ -1,0 +1,51 @@
+[
+  {
+    "ticketNumber": "TICKET-258233",
+    "description": "This is wrong product",
+    "imageUrl": "http://localhost:51105/uploads/1730484708541-854777085-1730401522869.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:11:48.552Z"
+  },
+  {
+    "ticketNumber": "TICKET-479393",
+    "description": "Wrong product received",
+    "imageUrl": "http://localhost:51105/uploads/1730484830073-784233384-1730401482881.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:13:52.028Z"
+  },
+  {
+    "ticketNumber": "TICKET-762941",
+    "description": "wrong product",
+    "imageUrl": "http://localhost:51105/uploads/1730487198921-480765566-1730401522869.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:53:19.924Z"
+  },
+  {
+    "ticketNumber": "TICKET-496446",
+    "description": "wrong product",
+    "imageUrl": "http://localhost:51105/uploads/1730487246682-597179281-1730401522869.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:54:08.426Z"
+  },
+  {
+    "ticketNumber": "TICKET-808730",
+    "description": "the wrong product",
+    "imageUrl": "http://localhost:51105/uploads/1730487338052-379324880-1730425826222.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:55:40.103Z"
+  },
+  {
+    "ticketNumber": "TICKET-631740",
+    "description": "the wrong product",
+    "imageUrl": "http://localhost:51105/uploads/1730487339247-186807988-1730425826222.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:55:40.996Z"
+  },
+  {
+    "ticketNumber": "TICKET-448265",
+    "description": "weronm proiduct",
+    "imageUrl": "http://localhost:51105/uploads/1730487597867-934007326-1730425826222.jpg",
+    "decision": "Escalate to Human Agent",
+    "createdAt": "2024-11-01T18:59:59.231Z"
+  }
+]
